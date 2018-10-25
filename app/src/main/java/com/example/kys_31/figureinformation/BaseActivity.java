@@ -3,43 +3,36 @@ package com.example.kys_31.figureinformation;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
 import java.util.Observer;
 
-import data.HandleUserMessage;
-import data.UserMessage;
-import observer.LoginStateObservable;
 import util.AutoLoginUtil;
-import util.BitmapUtil;
-import util.TimeUtil;
 import util.ViewUtil;
 import variable.SystemSetVariable;
-import variable.UserMessageVariable;
 
 
 /**
- * Created by 张同心 on 2017/8/18.
- * @function Activity 基类
+ *@author : 老头儿
+ *@email : 527672827@qq.com
+ *@org : 河北北方学院 移动开发工程部 C508
+ *@function : （功能） 基类
  */
 
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener, Observer{
 
     public boolean mLoginState = false;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int layoutID = getLayoutID();
-        if (layoutID != 0){
-            setContentView(layoutID);
-        }
+
         /*隐藏标题栏*/
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null){
@@ -48,9 +41,13 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
         /*设置状态栏颜色*/
         Window window = getWindow();
-        window.setStatusBarColor(Color.parseColor("#EA403C"));
+        window.setStatusBarColor(Color.parseColor("#d5a175"));
 
-        LoginStateObservable.getInstatnce().addObserver(this);//注册观察者
+        int layoutID = getLayoutID();
+        if (layoutID != 0){
+            setContentView(layoutID);
+        }
+
         initControl();
         setControlListener();
     }
@@ -78,12 +75,12 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     /**
      * 设置控件的监听
      */
-     abstract void setControlListener();
+     public abstract void setControlListener();
 
     @Override
     public void onStart(){
         super.onStart();
-    /*屏幕亮度*/
+        /*屏幕亮度*/
         SystemSetVariable.osScreenBrightValue = ViewUtil.getScreenBrightness(this);
         if (SystemSetVariable.osNightModel){
             ViewUtil.setScreenBrightness(this, 10);

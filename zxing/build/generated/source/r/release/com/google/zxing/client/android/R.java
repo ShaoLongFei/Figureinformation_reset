@@ -33,8 +33,11 @@ public final class R {
         public static int standard_padding=0x7f090001;
     }
     public static final class drawable {
-        public static int launcher_icon=0x7f020000;
-        public static int share_via_barcode=0x7f020001;
+        public static int icon_del=0x7f020000;
+        public static int icon_love=0x7f020001;
+        public static int launcher_icon=0x7f020002;
+        public static int pic10=0x7f020003;
+        public static int share_via_barcode=0x7f020004;
     }
     public static final class id {
         public static int app_picker_list_item_icon=0x7f0a0007;

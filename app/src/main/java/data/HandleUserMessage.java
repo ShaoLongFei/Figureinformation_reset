@@ -1,11 +1,7 @@
 package data;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Environment;
-import android.os.Parcel;
-
-import com.example.kys_31.figureinformation.R;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,11 +9,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Random;
 
 /**
- * Created by 张同心 on 2017/9/19.
- * @function 处理用户信息
+ *@author : 老头儿
+ *@email : 527672827@qq.com
+ *@org : 河北北方学院 移动开发工程部 C508
+ *@function : （功能） 处理用户信息
  */
 
 public class HandleUserMessage {
@@ -30,12 +27,15 @@ public class HandleUserMessage {
     public static void saveData(UserMessage userMessage) {
         File dir = new File(osStrDir);
         File file = new File(dir, "user_"+userMessage.oStrPhoneNumber+".txt");
-        if (!dir.exists()){ dir.mkdirs();}
+        if (!dir.exists()){
+            Log.d("TAG", ""+dir.mkdirs());
+        }
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
             oos.writeObject(userMessage);
             oos.close();
         } catch (IOException e) {
+            Log.e("TAG", ""+e.getMessage());
             e.printStackTrace();
         }
     }

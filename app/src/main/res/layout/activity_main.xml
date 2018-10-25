@@ -18,13 +18,12 @@
 
     <!--底部区-->
     <LinearLayout
-        android:paddingTop="10dp"
         android:layout_alignParentBottom="true"
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <view.MetaballMenu xmlns:android="http://schemas.android.com/apk/res/android"
+        <view.MetaballMenu
+            android:visibility="gone"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/metaball_menu"
             android:layout_width="match_parent"
@@ -33,7 +32,8 @@
             android:padding="10dp"
             android:orientation="horizontal"
             android:layout_gravity="center"
-            app:backgroundColor="@android:color/holo_red_light"
+            android:background="@drawable/titlebar_big"
+            app:backgroundColor="@color/木色"
             app:metaballColor="@android:color/white"
             app:backgroundShapeRadius="0dp"
             app:needsElevation="true">
@@ -70,8 +70,6 @@
                 app:selectedImage="@drawable/personal_red"
                 android:gravity="center"
                 android:layout_gravity="center"/>
-
         </view.MetaballMenu>
     </LinearLayout>
-
 </RelativeLayout>

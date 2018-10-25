@@ -4,5 +4,5 @@
     android1:shape="rectangle">
 <solid android1:color="@android:color/white"/>
     <stroke android1:width="1dp"
-        android1:color="@android:color/darker_gray"/>
+        android1:color="@color/darkgray"/>
 </shape>

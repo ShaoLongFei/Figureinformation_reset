@@ -6,7 +6,21 @@
     <color name="firstPageBottomText">#bfbfbf</color>
     <color name="mainColor">#EA403C</color>
     <color name="yellow">#f2dc12</color>
+    <color name="bottomColor">#66EA403C</color>
 
+    <color name="color_00000000">#00000000</color>
+    <color name="color_E5E5E5">#E5E5E5</color>
+    <color name="shallow_gray">#44000000</color>
+    <color name="shallow_blue">#770000FF</color>
+    <color name="g">#aae68e</color>
+    <color name="黄色">#FFFF00</color>
+    <color name="青色">#00FFFF</color>
+    <color name="紫色"> #8B00FF</color>
+    <color name="蓝色">#0000FF</color>
+    <color name="红色"> #FF0000</color>
+    <color name="橙色"> #FF7F00</color>
+    <color name="木色">#d5a175</color>
+    <color name="半透明木色">#7bd5a175</color>
     <color name="style_red">#ff4c41</color>
 
     <color name="transparent">#00000000</color>
@@ -29,6 +43,17 @@
 
     <item name="subscribe_item_text_color_normal" type="color">@color/default_text</item>
 
+    <!--进度条-->
+    <!--覆盖颜色-->
+    <color name="bgColor_overlay">#60000000</color>
+    <color name="bgColor_overlay_black">#95000000</color>
+    <!--窗口背景颜色-->
+    <color name="bgColor_svprogressdefaultview">@android:color/white</color>
+    <!--标题颜色-->
+    <color name="textColor_svprogresshuddefault_msg">#000000</color>
+    <color name="roundColor_svprogresshuddefault">#e5e5e5</color>
+    <color name="roundProgressColor_svprogresshuddefault">@android:color/black</color>
+
     <color name="default_text">#ff454545</color>
     <color name="subscribe_item_text_color_pressed">#ffb9b9b9</color>
     <color name="category_subscribe_text">#ffffffff</color>
@@ -42,6 +67,7 @@
     <color name="background">#e7e7e6</color>
     <color name="control">#fcfcfd</color>
     <color name="textColor">#252323</color>
+    <color name="searchbg">#ffffffff</color>
     <color name="white">#ffffff</color><!--白色 -->
     <color name="ivory">#fffff0</color><!--象牙色 -->
     <color name="lightyellow">#ffffe0</color><!--亮黄色 -->
@@ -136,7 +162,6 @@
     <color name="lightskyblue">#87cefa</color><!--亮天蓝色 -->
     <color name="skyblue">#87ceeb</color><!--天蓝色 -->
     <color name="gray">#808080</color><!--灰色 -->
-    <color name="grey">#808080</color><!--灰色 -->
     <color name="olive">#808000</color><!--橄榄色 -->
     <color name="purple">#800080</color><!--紫色 -->
     <color name="maroon">#800000</color><!--粟色 -->
@@ -196,7 +221,7 @@
 
     <color name="gallery_background">#ff111111</color>
     <color name="gallery_alpha">#b0000000</color>
-    <color name="lighter_gray">#ffd3d3d3</color>
+    <color name="lighter_gray">#f7f7f7</color>
     <color name="simple_333333">#ff333333</color>
     <color name="simple_eeeeee">#ffeeeeee</color>
     <color name="simple_cccccc">#ffcccccc</color>
@@ -845,4 +870,8 @@
     <color name="social_profile_item_bg_pressed">#59838383</color>
     <color name="ss_top_progressbar_start">#10ffffff</color>
     <color name="ss_top_progressbar_end">#ffffffff</color>
+
+
+
+
 </resources>

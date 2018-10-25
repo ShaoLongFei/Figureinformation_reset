@@ -1,5 +1,22 @@
 <resources>
 
+    <!--进度条-->
+    <style name="AlertActivity_AlertStyle" parent="android:Theme.Dialog">
+        <!--<item name="android:windowAnimationStyle">@style/AnimAlert</item>-->
+        <!-- 边框 -->
+        <item name="android:windowFrame">@null</item>
+        <!-- 是否浮现在activity之上 -->
+        <item name="android:windowIsFloating">true</item>
+        <!-- 半透明 -->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- 无标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- 背景透明 -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- 模糊 -->
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -72,7 +89,7 @@
     <style name="title_bar_style">
         <item name="android:background">@drawable/bg_titlebar</item>
         <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">44.0dip</item>
+        <item name="android:layout_height">50.0dip</item>
     </style>
 
     <style name="back_view" parent="@style/title_bar_button">

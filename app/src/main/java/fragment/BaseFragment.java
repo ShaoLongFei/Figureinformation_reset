@@ -2,7 +2,6 @@ package fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,27 +9,26 @@ import android.widget.Toast;
 
 import java.util.Observer;
 
-import observer.LoginStateObservable;
 import util.AutoLoginUtil;
 import util.ViewUtil;
 import variable.SystemSetVariable;
 
 /**
- * Created by 张同心 on 2017/9/12.
- * @function Fragment 基类
+ *@author : 老头儿
+ *@email : 527672827@qq.com
+ *@org : 河北北方学院 移动开发工程部 C508
+ *@function : （功能） 基类
  */
 
 public abstract class BaseFragment extends Fragment implements View.OnClickListener,Observer{
 
     public View view;
-    public boolean mLoginState = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup viewGroup, Bundle saveInstanceState){
         view = inflater.inflate(getLayoutID(),null);
         initControl();
         setListener();
-        LoginStateObservable.getInstatnce().addObserver(this);//注册观察者
         return view;
     }
 
@@ -40,10 +38,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
 
     protected abstract void setListener();
 
-    protected abstract void showByLoginState();
-
     public void showToast(String content, boolean show){
-        Toast.makeText(getActivity(),content,show?Toast.LENGTH_LONG:Toast.LENGTH_SHORT);
+        Toast.makeText(getActivity(),content,show?Toast.LENGTH_LONG:Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -59,7 +55,6 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         /*自动登录*/
         AutoLoginUtil.startAutoLogin(getActivity());
         /*根据登录状态显示*/
-        showByLoginState();
     }
 
 }

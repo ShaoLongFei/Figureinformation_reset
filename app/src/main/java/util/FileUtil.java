@@ -1,5 +1,8 @@
 package util;
 
+import android.content.Context;
+import android.os.Environment;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -99,5 +102,15 @@ public class FileUtil {
             }
         }
         fileDir.delete();
+    }
+
+    public static File getCahceDirPath(Context context, String onlyName){
+        String cacehDirPath= null;
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || !Environment.isExternalStorageRemovable()){
+            cacehDirPath = context.getExternalCacheDir().getPath();
+        }else {
+            cacehDirPath = context.getCacheDir().getPath();
+        }
+        return new File(cacehDirPath+File.separator+onlyName);
     }
 }

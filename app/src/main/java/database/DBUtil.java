@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,21 +14,29 @@ public class DBUtil {
 	private Context mContext;
 	private SQLHelper mSQLHelp;
 	private SQLiteDatabase mSQLiteDatabase;
+	private Cursor cursor;
+	private static String mStrLock = "lockOne";
 
 	private DBUtil(Context context) {
 		mContext = context;
 		mSQLHelp = new SQLHelper(context);
 		mSQLiteDatabase = mSQLHelp.getWritableDatabase();
 	}
+
 	/**
 	 * 初始化数据库操作DBUtil类
 	 */
 	public static DBUtil getInstance(Context context) {
-		if (mInstance == null) {
-			mInstance = new DBUtil(context);
+		if (mInstance == null){
+			synchronized (mStrLock){
+				if (mInstance == null) {
+					mInstance = new DBUtil(context);
+				}
+			}
 		}
 		return mInstance;
 	}
+
 	/**
 	 * 关闭数据库
 	 */
@@ -41,107 +48,125 @@ public class DBUtil {
 		mInstance = null;
 	}
 
-	/**
-	 * 添加数据
-	 */
-	public void insertData(ContentValues values) {
-		mSQLiteDatabase.insert(SQLHelper.TABLE_CHANNEL, null, values);
-	}
-
-	public void insertCollection(ContentValues values){
-		long i = mSQLiteDatabase.insert(SQLHelper.COLLECTION_TABLE_NAME,null,values);
-	}
-
-	/**
-	 * 更新数据
-	 * 
-	 * @param values
-	 * @param whereClause
-	 * @param whereArgs
-	 */
-	public void updateData(ContentValues values, String whereClause,
-                           String[] whereArgs) {
-		mSQLiteDatabase.update(SQLHelper.TABLE_CHANNEL, values, whereClause,
-				whereArgs);
-	}
-
-	/**
-	 * 删除数据
-	 * 
-	 * @param whereClause
-	 * @param whereArgs
-	 */
-	public void deleteData(String whereClause, String[] whereArgs) {
-		mSQLiteDatabase
-				.delete(SQLHelper.TABLE_CHANNEL, whereClause, whereArgs);
-	}
-	public void deleteCollection(String number, String title) {
-		int i = mSQLiteDatabase.delete(SQLHelper.COLLECTION_TABLE_NAME,"phoneNumber = ? and title = ?",new String[]{number,title});
-	}
-
-	/**
-	 * 查询数据
-	 * 
-	 * @param columns
-	 * @param selection
-	 * @param selectionArgs
-	 * @param groupBy
-	 * @param having
-	 * @param orderBy
-	 * @return
-	 */
-	public Cursor selectData(String[] columns, String selection,
-                             String[] selectionArgs, String groupBy, String having,
-                             String orderBy) {
-		Cursor cursor = mSQLiteDatabase.query(SQLHelper.TABLE_CHANNEL,columns, selection, selectionArgs, groupBy, having, orderBy);
-		return cursor;
-	}
-
-	public List<HashMap<String,String>> selectCollection(String colum,String info) {
-		Cursor cursor = mSQLiteDatabase.query(SQLHelper.COLLECTION_TABLE_NAME,null,colum+" = ?",new String[]{info},null,null,null);
-		List<HashMap<String,String>> hashMapList=new ArrayList<>();
-		HashMap<String,String> hashMap;
-		if (cursor.moveToFirst()){
-			for (int i = 0; i<cursor.getCount(); i++){
-				cursor.moveToPosition(i);
-				hashMap=new HashMap<>();
-				hashMap.put("phoneNumber",cursor.getString(1));
-				hashMap.put("author",cursor.getString(2));
-				hashMap.put("time",cursor.getString(3));
-				hashMap.put("clickNumber",cursor.getString(4));
-				hashMap.put("title",cursor.getString(5));
-				hashMap.put("content",cursor.getString(6));
-				hashMap.put("pictureURL",cursor.getString(7));
-				hashMapList.add(hashMap);
+	public synchronized void addClassName(List<HashMap<String,String>> listClassName){
+		ContentValues values = new ContentValues();
+		int length = listClassName.size();
+		for (int i = 0; i < length; i++) {
+			if (verifySaved(SQLHelper.CLASSNAME, listClassName.get(i).get("classname"), "classname")){
+				deleteClassName(listClassName.get(i).get("classname"));
 			}
+			values.put("kind", listClassName.get(i).get("kind"));
+			values.put("classname", listClassName.get(i).get("classname"));
+			values.put("url", listClassName.get(i).get("url"));
+			mSQLiteDatabase.insert(SQLHelper.CLASSNAME, null, values);
 		}
-		return hashMapList;
 	}
 
-	public int selectCollectionFuhe(String number,String count) {
-		Cursor cursor = mSQLiteDatabase.query(SQLHelper.COLLECTION_TABLE_NAME,null,"phoneNumber = ? and title = ?",new String[]{number,count},null,null,null);
-		return cursor.getCount();
+	public synchronized void addCardContent(List<HashMap<String, String>> list){
+		ContentValues values = new ContentValues();
+		for (int i = 0; i < list.size(); i++) {
+			if (verifySaved(SQLHelper.CARDCONTENT, list.get(i).get("title"), "title")){
+				deleteCardContent(list.get(i).get("title"));
+			}
+			values.put("kind", list.get(i).get("kind"));
+			values.put("classname", list.get(i).get("classname"));
+			values.put("title", list.get(i).get("title"));
+			values.put("link", list.get(i).get("link"));
+			values.put("description", list.get(i).get("description"));
+			values.put("timeandauthor", list.get(i).get("timeandauthor"));
+			values.put("pubdate", list.get(i).get("pubdate"));
+			mSQLiteDatabase.insert(SQLHelper.CARDCONTENT, null, values);
+		}
 	}
 
-	public List<HashMap<String,String>> selectCollectionFuHe(String number,String count) {
-		Cursor cursor = mSQLiteDatabase.query(SQLHelper.COLLECTION_TABLE_NAME,null,"phoneNumber = ? and title = ?",new String[]{number,count},null,null,null);
-		List<HashMap<String,String>> hashMapList=new ArrayList<>();
-		HashMap<String,String> hashMap;
+	private synchronized void deleteClassName(String className){
+		mSQLiteDatabase.delete(SQLHelper.CLASSNAME, "classname = ?", new String[]{className});
+	}
+
+	private synchronized void deleteCardContent(String title){
+		mSQLiteDatabase.delete(SQLHelper.CARDCONTENT, "title = ?", new String[]{title});
+	}
+
+	public synchronized List<String> getAllClassName(){
+		List<String> listClassName = new ArrayList<>();
+		cursor = mSQLiteDatabase.query(SQLHelper.CLASSNAME,null,null, null, null, null, null, null);
 		if (cursor.moveToFirst()){
-			Log.e("TAG", "数据长度："+cursor.getCount());
 			for (int i = 0; i < cursor.getCount(); i++){
 				cursor.moveToPosition(i);
-				hashMap=new HashMap<>();
-				hashMap.put("phoneNumber",cursor.getString(1));
-				hashMap.put("author",cursor.getString(2));
-				hashMap.put("time",cursor.getString(3));
-				hashMap.put("clickNumber",cursor.getString(4));
-				hashMap.put("title",cursor.getString(5));
-				hashMap.put("content",cursor.getString(6));
-				hashMap.put("pictureURL",cursor.getString(7));
-				hashMapList.add(hashMap);
+				listClassName.add(0,cursor.getString(1));
 			}
 		}
-		return hashMapList;
+		cursor.close();
+		return listClassName;
 	}
+
+	public synchronized List<HashMap<String, String>>  getCardContentByClassName(String className){
+		List<HashMap<String, String>> listCardContent = new ArrayList<>();
+		cursor = mSQLiteDatabase.query(SQLHelper.CARDCONTENT, null, "classname = ?", new String[]{className}, null, null, null);
+		HashMap<String, String> map;
+		if (cursor.moveToFirst()){
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				map = new HashMap<>();
+				map.put("classname", cursor.getString(1));
+				map.put("title", cursor.getString(2));
+				map.put("link", cursor.getString(3));
+				map.put("description", cursor.getString(4));
+				map.put("timeandauthor", cursor.getString(5));
+				map.put("pubdate", cursor.getString(7));
+				listCardContent.add(map);
+			}
+		}
+		cursor.close();
+		return listCardContent;
+	}
+
+	public synchronized String  getCardContentByTitle(String title){
+		cursor = mSQLiteDatabase.query(SQLHelper.CARDCONTENT, null, "title = ?", new String[]{title}, null, null, null);
+		String content = "文献已被作者删除";
+		if (cursor.moveToFirst()){
+			if (cursor.getCount() > 0){
+				content = cursor.getString(4);
+			}
+		}
+		cursor.close();
+		return content;
+	}
+
+	public synchronized List<HashMap<String, String>> getAllCardContent(String kind){
+		List<HashMap<String, String>> listCardContent = new ArrayList<>();
+		HashMap<String, String> map;
+		if (kind.equals("全部资讯")){
+			cursor = mSQLiteDatabase.query(SQLHelper.CARDCONTENT, null, null, null, null, null, null);
+		}else {
+			cursor = mSQLiteDatabase.query(SQLHelper.CARDCONTENT, null, "kind = ?", new String[]{kind}, null, null, null);
+		}
+		if (cursor.moveToFirst()){
+			for (int i = 0; i < cursor.getCount(); i++) {
+				cursor.moveToPosition(i);
+				map = new HashMap<>();
+				map.put("classname", cursor.getString(1));
+				map.put("title", cursor.getString(2));
+				map.put("link", cursor.getString(3));
+				map.put("description", cursor.getString(4));
+				map.put("timeandauthor", cursor.getString(5));
+				map.put("pubdate", cursor.getString(7));
+				listCardContent.add(map);
+			}
+		}
+		cursor.close();
+		return listCardContent;
+	}
+
+	private synchronized boolean verifySaved(String tableName, String value, String col){
+		cursor = mSQLiteDatabase.query(tableName, null, col+" = ?", new String[]{value}, null, null, null);
+		if (cursor.getCount() > 0){
+			cursor.close();
+			return true;
+		}else {
+			cursor.close();
+			return false;
+		}
+	}
+
 }

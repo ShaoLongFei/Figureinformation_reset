@@ -1,5 +1,13 @@
 package com.example.kys_31.figureinformation;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -7,14 +15,17 @@ import android.widget.TextView;
 import java.util.Observable;
 
 /**
- * Created by 张同心 on 2017/9/14.
- * @function 关于APP介绍
+ *@author : 老头儿
+ *@email : 527672827@qq.com
+ *@org : 河北北方学院 移动开发工程部 C508
+ *@function : （功能） 关于
  */
 
 public class AboutActivity extends BaseActivity {
 
     private LinearLayout mLlBack;
     private TextView mTvTitleName;
+    private Context context = AboutActivity.this;
 
     @Override
     protected int getLayoutID() {
@@ -23,13 +34,16 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     protected void initControl() {
-        mLlBack = (LinearLayout)findViewById(R.id.titleBack_persionMessage_ll);
-        mTvTitleName = (TextView)findViewById(R.id.titleName_tv);
+        mLlBack = (LinearLayout) findViewById(R.id.titleBack_persionMessage_ll);
+        mTvTitleName = (TextView) findViewById(R.id.titleName_tv);
         mTvTitleName.setText("关于图情资讯");
+
     }
 
+
+
     @Override
-    void setControlListener() {
+    public void setControlListener() {
         mLlBack.setOnClickListener(this);
     }
 

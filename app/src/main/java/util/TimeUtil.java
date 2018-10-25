@@ -11,6 +11,8 @@ import java.util.Date;
 
 public class TimeUtil {
 
+    private static final String TAG = "timeUtil";
+
     /**
      * 格式化时间
      * @param time
@@ -37,5 +39,34 @@ public class TimeUtil {
         String time = sdf.format(new Date());
         return time;
     }
+    /**
+     * 获取系统日期
+     * @return 系统日期
+     */
+    public static String getSystemDate(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String time = sdf.format(new Date());
+        return time.substring(0,10);
+    }
 
+    public static String formatTimeOne(String strTime){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if (strTime.contains("GMT")){
+            strTime = strTime.substring(0, strTime.indexOf("GMT"));
+        }
+        return format.format(new Date(strTime));
+    }
+
+    public static boolean compatatorTime(String time1,String time2){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date1 = null;
+        Date date2 = null;
+        try {
+            date1 = format.parse(time1);
+            date2 = format.parse(time2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date1.getTime()-date2.getTime()>0;
+    }
 }

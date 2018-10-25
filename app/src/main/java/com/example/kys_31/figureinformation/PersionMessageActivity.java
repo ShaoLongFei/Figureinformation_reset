@@ -19,28 +19,32 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import java.io.IOException;
+import com.bumptech.glide.Glide;
+
 import java.util.Calendar;
 import java.util.Observable;
 
-import custom.RoundImageCustom;
+import view.RoundImageView;
 import data.HandleUserMessage;
 import data.UserMessage;
 import util.BitmapUtil;
+import util.PermissionApplyUtil;
 import util.TimeUtil;
 import util.ViewUtil;
 import variable.UserMessageVariable;
 
 /**
- * Created by 张同心 on 2017/9/12.
- * @function 个人中心
+ *@author : 老头儿
+ *@email : 527672827@qq.com
+ *@org : 河北北方学院 移动开发工程部 C508
+ *@function : （功能） 个人信息
  */
 
 public class PersionMessageActivity extends BaseActivity {
 
     private TextView mTvEMail;
     private LinearLayout mLlHead;
-    private RoundImageCustom mRivHead;
+    private RoundImageView mRivHead;
     private LinearLayout mLlName;
     private TextView mTvName;
     private LinearLayout mLlSex;
@@ -63,7 +67,7 @@ public class PersionMessageActivity extends BaseActivity {
     protected void initControl() {
         mTvEMail = (TextView)findViewById(R.id.email_persionMessage_tv);
         mLlHead = (LinearLayout)findViewById(R.id.head_persionMessage_ll);
-        mRivHead = (RoundImageCustom) findViewById(R.id.head_persionMessage_riv);
+        mRivHead = (RoundImageView) findViewById(R.id.head_persionMessage_riv);
         mLlName = (LinearLayout)findViewById(R.id.name_persionMessage_ll);
         mTvName = (TextView)findViewById(R.id.name_persionMessage_tv);
         mLlSex = (LinearLayout)findViewById(R.id.sex_persionMessage_ll);
@@ -81,11 +85,22 @@ public class PersionMessageActivity extends BaseActivity {
         mTvName.setText(UserMessageVariable.osUserMessage.oStrName);
         mTvSex.setText(UserMessageVariable.osUserMessage.oIntSex == 0?"男":"女");
         mTvBirsday.setText(UserMessageVariable.osUserMessage.oStrBirsday);
-        mRivHead.setImageBitmap(BitmapUtil.stringToBitmap(UserMessageVariable.osUserMessage.oStrHead));
+        if (UserMessageVariable.osUserMessage.oStrHead.contains("http")){
+            Glide.with(this).load(UserMessageVariable.osUserMessage.oStrHead)
+                    .asBitmap()
+                    .override(60, 60)
+                    .placeholder(R.drawable.logo)
+                    .error(R.drawable.logo)
+                    .into(mRivHead);
+        }else {
+            mRivHead.setImageBitmap(BitmapUtil.get().stringToBitmap(UserMessageVariable.osUserMessage.oStrHead));
+        }
+
+        PermissionApplyUtil.applyPermissionCarmera(this);
     }
 
     @Override
-    void setControlListener() {
+    public void setControlListener() {
         mLlHead.setOnClickListener(this);
         mLlName.setOnClickListener(this);
         mLlSex.setOnClickListener(this);
@@ -124,7 +139,7 @@ public class PersionMessageActivity extends BaseActivity {
      */
     private void saveUserMessage() {
         UserMessageVariable.osUserMessage = new UserMessage(UserMessageVariable.osUserMessage.oStrPhoneNumber,
-                UserMessageVariable.osUserMessage.oStrPassword, mHeadBitmep == null?UserMessageVariable.osUserMessage.oStrHead:BitmapUtil.bitmapToString(mHeadBitmep),
+                UserMessageVariable.osUserMessage.oStrPassword, mHeadBitmep == null?UserMessageVariable.osUserMessage.oStrHead:BitmapUtil.get().bitmapToString(mHeadBitmep),
                 mTvName.getText().toString(), mTvBirsday.getText().toString(), mTvEMail.getText().toString(), mTvSex.getText().toString().equals("男")?0:1,
                 UserMessageVariable.osUserMessage.oIntLookCount, UserMessageVariable.osUserMessage.oStrUpLookTime);
         HandleUserMessage.saveData(UserMessageVariable.osUserMessage);
@@ -144,7 +159,7 @@ public class PersionMessageActivity extends BaseActivity {
         DatePickerDialog dialogBirsday = new DatePickerDialog(PersionMessageActivity.this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                mTvBirsday.setText(TimeUtil.filterTime(i+"-"+i1+"-"+i2));
+                mTvBirsday.setText(TimeUtil.filterTime(i+"-"+(i1+1)+"-"+i2));
             }
         },year,month,day);
         dialogBirsday.show();
@@ -163,6 +178,11 @@ public class PersionMessageActivity extends BaseActivity {
         ViewUtil.setDialogWindowAttr(dialogSetSex, 500, 500);
         final RadioButton rbMan = (RadioButton)viewSetSex.findViewById(R.id.sexMan_persionMessage_rb);
         RadioButton rbWoman = (RadioButton)viewSetSex.findViewById(R.id.sexWoman_persionMessage_rb);
+        if (UserMessageVariable.osUserMessage.oIntSex==0){
+            rbMan.setChecked(true);
+        }else {
+            rbWoman.setChecked(true);
+        }
         if (mTvSex.getText().equals("女")){rbWoman.isChecked();}
         Button btSure = (Button)viewSetSex.findViewById(R.id.sureSex_persionMessage_bt);
         btSure.setOnClickListener(new View.OnClickListener() {
@@ -190,6 +210,7 @@ public class PersionMessageActivity extends BaseActivity {
         dialogSetName.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
         dialogSetName.getWindow().setContentView(viewSetName);
         final EditText etSetName = (EditText)viewSetName.findViewById(R.id.setname_persionmessage_tv);
+        etSetName.setText(mTvName.getText().toString());
         Button btSure = (Button)viewSetName.findViewById(R.id.sureName_persionMessage_bt);
         btSure.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,26 +267,39 @@ public class PersionMessageActivity extends BaseActivity {
             return;
         }else {
             if (requestCode == 1){
-                try {
-                    Uri pictureUri = data.getData();
-                    if (pictureUri != null){
-                        mHeadBitmep = MediaStore.Images.Media.getBitmap(getContentResolver(),pictureUri);
-                        mRivHead.setImageBitmap(mHeadBitmep);
-                    }else {
-                        showToast("获取图片失败",false);
-                    }
-                } catch (IOException e) {
-                    showToast("获取图片失败",false);
-                    e.printStackTrace();
-                }
-            }else {
+                startPhotoZoom(data.getData());
+            }else if (requestCode == 0){
                 Bundle extra = data.getExtras();
                 mHeadBitmep = extra.getParcelable("data");
                 mRivHead.setImageBitmap(mHeadBitmep);
+            }else {
+                if (data != null){
+                    Bundle extra = data.getExtras();
+                    mHeadBitmep = extra.getParcelable("data");
+                    mRivHead.setImageBitmap(mHeadBitmep);
+                }
             }
         }
     }
 
+    /**
+     * 裁剪图片方法实现
+     * @param uri
+     */
+    public void startPhotoZoom(Uri uri) {
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        //下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
+        intent.putExtra("crop", "true");
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        // outputX outputY 是裁剪图片宽高
+        intent.putExtra("outputX", 150);
+        intent.putExtra("outputY", 150);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, 3);
+    }
 
     @Override
     public void update(Observable observable, Object o) {

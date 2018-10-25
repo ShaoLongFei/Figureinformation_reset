@@ -3,7 +3,6 @@ package util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.util.Log;
 
 import com.example.kys_31.figureinformation.R;
@@ -21,7 +20,6 @@ import cn.sharesdk.onekeyshare.ShareContentCustomizeCallback;
  */
 
 public class SharedUtil {
-
 
     /**
      * 分享
@@ -60,38 +58,32 @@ public class SharedUtil {
                     paramsToShare.setUrl(contentURL);
                     paramsToShare.setTitle(title);
                     paramsToShare.setText(content);
-                    paramsToShare.setImageUrl(pictureURL);
                     paramsToShare.setShareType(Platform.SHARE_WEBPAGE);
                 }
                 else if ("WechatMoments".equals(platform.getName())) {
                     paramsToShare.setUrl(contentURL);
                     paramsToShare.setTitle(title);
                     paramsToShare.setText(content);
-                    paramsToShare.setImageUrl(pictureURL);
                     paramsToShare.setShareType(Platform.SHARE_WEBPAGE);
                 }else if ("WechatFavorite".equals(platform.getName())){
                     paramsToShare.setUrl(contentURL);
                     paramsToShare.setTitle(title);
                     paramsToShare.setText(content);
-                    paramsToShare.setImageUrl(pictureURL);
                     paramsToShare.setShareType(Platform.SHARE_WEBPAGE);
                 }
-
             }
         });
         oks.setCallback(new PlatformActionListener() {
             @Override
             public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-                Log.e("TAG", "onComplete ---->  分享成功");
                 platform.isClientValid();
             }
 
             @Override
             public void onError(Platform platform, int i, Throwable throwable) {
-                Log.e("TAG", "onError ---->  分享失败" + throwable.getStackTrace().toString());
-                Log.e("TAG", "onError ---->  分享失败" + throwable.getMessage());
                 throwable.getMessage();
                 throwable.printStackTrace();
+                Log.w("TAG", "错误信息："+throwable.getMessage());
             }
 
             @Override

@@ -2,7 +2,7 @@ package variable;
 
 /**
  * Created by 张同心 on 2017/9/26.
- * @function 系统设置工程量
+ * @function 系统设置工程量 夜间模式
  */
 
 public class SystemSetVariable {

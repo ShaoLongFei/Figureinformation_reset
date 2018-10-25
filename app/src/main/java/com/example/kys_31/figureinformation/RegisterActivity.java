@@ -1,23 +1,12 @@
 package com.example.kys_31.figureinformation;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.telephony.PhoneNumberUtils;
 import android.text.TextUtils;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.example.myfirstjar.Concrete.PhoneNumberStart;
 import com.example.myfirstjar.Utils.NoteVerify;
 import com.example.myfirstjar.intefaces.NoteVerifyInterface;
 
@@ -26,8 +15,10 @@ import java.util.Observable;
 import data.HandleUserMessage;
 
 /**
- * Created by 张同心 on 2017/9/18.
- * function 注册
+ *@author : 老头儿
+ *@email : 527672827@qq.com
+ *@org : 河北北方学院 移动开发工程部 C508
+ *@function : （功能） 注册
  */
 
 public class RegisterActivity extends BaseActivity {
@@ -39,6 +30,7 @@ public class RegisterActivity extends BaseActivity {
     private int mNoteCode;
     private NoteVerifyInterface mNoteVerify;
     private ImageView mIvClose;
+    private String mStrAim = "";
 
     @Override
     protected int getLayoutID() {
@@ -52,20 +44,11 @@ public class RegisterActivity extends BaseActivity {
         mEtVerificationCode = (EditText)findViewById(R.id.verificationCode_register_et);
         mBtNext = (Button)findViewById(R.id.next_register_bt);
         mIvClose = (ImageView)findViewById(R.id.close_register_iv);
-        requestPermission();
-    }
-
-    /**
-     * 请求权限
-     */
-    private void requestPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 0);
-        }
+        mStrAim = getIntent().getStringExtra("aim");
     }
 
     @Override
-    void setControlListener() {
+    public void setControlListener() {
         mIvClose.setOnClickListener(this);
         mBtNext.setOnClickListener(this);
         mBtGetVerificationCode.setOnClickListener(this);
@@ -93,14 +76,36 @@ public class RegisterActivity extends BaseActivity {
      */
     private void nextStep() {
         String phoneNumber = mEtPhoneNumber.getText().toString();
-        if (mNoteVerify.MatePhoneNumberAndVerifyNumber(phoneNumber, mNoteCode)){
-            Intent intent = new Intent(this, SetPasswrodActivity.class);
-            intent.putExtra("phoneNumber", phoneNumber);
-            startActivity(intent);
-            finish();
+        if (!TextUtils.isEmpty(phoneNumber)){
+            if (mStrAim.equals("忘记密码")){
+                if (HandleUserMessage.userExist(phoneNumber)){
+                    Intent intent = new Intent(this, SetPasswrodActivity.class);
+                    intent.putExtra("phoneNumber", phoneNumber);
+                    intent.putExtra("aim", mStrAim);
+                    startActivity(intent);
+                    finish();
+                }else {
+                    showToast("该手机号从未注册过！", false);
+                }
+            }else {
+                if (!HandleUserMessage.userExist(phoneNumber)){
+                    if (mNoteVerify !=null && mNoteVerify.MatePhoneNumberAndVerifyNumber(phoneNumber, mNoteCode)){
+                        Intent intent = new Intent(this, SetPasswrodActivity.class);
+                        intent.putExtra("phoneNumber", phoneNumber);
+                        intent.putExtra("aim", mStrAim);
+                        startActivity(intent);
+                        finish();
+                    }else {
+                        showToast("请输入正确的验证码",false);
+                    }
+                }else {
+                    showToast("该手机号已经注册", false);
+                }
+            }
         }else {
-            showToast("请输入正确的验证码",false);
+            showToast("手机号不能为空", false);
         }
+
     }
 
     /**
@@ -108,39 +113,19 @@ public class RegisterActivity extends BaseActivity {
      */
     public void getVerificationCode() {
         String phoneNumber = mEtPhoneNumber.getText().toString();
-        if (!TextUtils.isEmpty(phoneNumber)){
-            if (!HandleUserMessage.userExist(phoneNumber)){
-                mNoteVerify =  NoteVerify.getInitialize(RegisterActivity.this);
-                mNoteCode = mNoteVerify.createVerifyNumber(phoneNumber, "图情资讯");
-                if (mNoteCode != 0 ){
-                    mEtVerificationCode.setText(String.valueOf(mNoteCode));
-                }
-            }else {
-                showToast("该手机号已经注册", false);
-            }
-        }else {
-            showToast("手机号不能为空", false);
-        }
+        mNoteVerify =  NoteVerify.getInitialize(RegisterActivity.this);
+        mNoteCode = mNoteVerify.createVerifyNumber(phoneNumber, "图情资讯");
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        initActivitySize();
     }
 
-    /**
-     * 调整Activity大小
-     */
-    private void initActivitySize() {
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        getWindow().setAttributes(params);
-    }
 
     @Override
     public void update(Observable observable, Object o) {
         mLoginState = (Boolean)o;
     }
+
 }

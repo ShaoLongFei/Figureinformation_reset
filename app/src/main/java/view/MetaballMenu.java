@@ -643,7 +643,7 @@ public class MetaballMenu extends LinearLayout {
         // Initialize the animation object
         if(mTransitionAnimation == null) {
             mTransitionAnimation = new TransitionAnimation();
-            mTransitionAnimation.setDuration(500);
+            mTransitionAnimation.setDuration(100);
             mTransitionAnimation.setInterpolator(new BounceInterpolator());
         }
 

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/file_list_bg">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,9 +43,10 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginRight="10dp"
-                android:src="@drawable/account" />
+                android:src="@drawable/phone_icon" />
 
             <EditText
+                android:maxLength="11"
                 android:inputType="number"
                 android:id="@+id/account_login_et"
                 android:layout_width="210dp"
@@ -68,6 +71,8 @@
                 android:src="@drawable/password" />
 
             <EditText
+                android:maxLength="12"
+                android:password="true"
                 android:id="@+id/password_login_bg"
                 android:layout_width="210dp"
                 android:layout_height="wrap_content"
@@ -87,7 +92,7 @@
             android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
-            android:background="@drawable/login_button_bg"
+            android:background="@drawable/persionmessage_bt_bg"
             android:text="登         录"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />

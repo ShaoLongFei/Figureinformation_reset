@@ -6,6 +6,5 @@ package variable;
  */
 
 public class LoginStateVariable {
-
-    public static boolean osLoginState = false;
+    public static volatile boolean osLoginState = false;
 }

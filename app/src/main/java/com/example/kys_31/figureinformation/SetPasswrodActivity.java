@@ -2,9 +2,7 @@ package com.example.kys_31.figureinformation;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,13 +11,16 @@ import java.util.Observable;
 
 import data.HandleUserMessage;
 import data.UserMessage;
-import observer.LoginStateObservable;
+import util.AutoLoginUtil;
 import util.BitmapUtil;
+import variable.LoginStateVariable;
 import variable.UserMessageVariable;
 
 /**
- * Created by 张同心 on 2017/9/18.
- * @function 设置密码
+ *@author : 老头儿
+ *@email : 527672827@qq.com
+ *@org : 河北北方学院 移动开发工程部 C508
+ *@function : （功能） 设置密码
  */
 
 public class SetPasswrodActivity extends BaseActivity {
@@ -46,7 +47,7 @@ public class SetPasswrodActivity extends BaseActivity {
     }
 
     @Override
-    void setControlListener() {
+    public void setControlListener() {
         mTvBackRegister.setOnClickListener(this);
         mBtSuccess.setOnClickListener(this);
     }
@@ -61,9 +62,10 @@ public class SetPasswrodActivity extends BaseActivity {
             case R.id.success_setPassword_bt:
                 String password = mEtSetPassword.getText().toString();
                 if (password.equals(mEtSurePassword.getText().toString())){
-                    UserMessageVariable.osUserMessage = new UserMessage(mStrPhoneNumber, password, BitmapUtil.bitmapToString(BitmapFactory.decodeResource(getResources(), R.drawable.logo)), "未设置姓名", "0", "qwertyuioasdfghjklzxcvbnmqweadg", 0, 0,"首次使用");
+                    UserMessageVariable.osUserMessage = new UserMessage(mStrPhoneNumber, password, BitmapUtil.get().bitmapToString(BitmapFactory.decodeResource(getResources(), R.drawable.logo)), "未设置姓名", "0", "qwertyuioasdfghjklzxcvbnmqweadg", 0, 0,"首次使用");
                     HandleUserMessage.saveData(UserMessageVariable.osUserMessage);
-                    LoginStateObservable.getInstatnce().notificationOberver(true);
+                    LoginStateVariable.osLoginState = true;
+                    AutoLoginUtil.autoLogin(this);
                     finish();//注册完毕
                 }else {
                     showToast("两次输入密码不同", false);
@@ -77,22 +79,10 @@ public class SetPasswrodActivity extends BaseActivity {
     @Override
     public void onResume(){
         super.onResume();
-        initActivitySize();
-    }
-
-    /**
-     * 初始化Activity的大小
-     */
-    private void initActivitySize() {
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        getWindow().setAttributes(params);
     }
 
     @Override
     public void update(Observable observable, Object o) {
-        Log.e("TAG", "登录");
         mLoginState = (Boolean)o;
     }
 }

@@ -1,134 +1,156 @@
 package com.example.kys_31.figureinformation;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
+import android.graphics.Color;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.view.View.OnLongClickListener;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.SlidingDrawer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Observable;
 
-import adapter.CollectionAdapter;
-import database.DBUtil;
-import variable.UserMessageVariable;
+import data.CollectEssayMessage;
+import data.HandleCollectEssayMessage;
+import util.ViewUtil;
 
-import static adapter.CollectionAdapter.isShow;
-import static adapter.CollectionAdapter.listBoolean;
+import static com.example.kys_31.figureinformation.R.layout.dialog_collection_view;
+import static com.example.kys_31.figureinformation.R.layout.dialog_special_view;
 
 /**
- * Created by 张同心 on 2017/9/26.
- * @function 收藏栏
+ * Created by kys_7 on 2017/11/17.
  */
 
-public class CollectionActivity extends BaseActivity {
+public class CollectionActivity extends AppCompatActivity{
+    private GridView bookShelf;
 
-    private LinearLayout mLlBack;
-    private TextView mTvTitleName;
-    private TextView mTvDeleteSelected;
-    private CheckBox mRbSelectAll;
-    private ListView mLvCollectionMessage;
-    private List<HashMap<String,String>> list=new ArrayList<>();
-    private boolean isDelete=true;
-    private CollectionAdapter collectionAdapter;
+    private Button back;
+    private List<CollectEssayMessage> mListCollectionMessage=new ArrayList<>();
 
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    protected int getLayoutID() {
-        return R.layout.collectionorsubscription_activity;
-    }
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.layout_collection);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null){
+            actionBar.hide();
+        }
+        /*设置状态栏颜色*/
+        Window window = getWindow();
+        window.setStatusBarColor(Color.parseColor("#d5a175"));
 
-    @Override
-    protected void initControl() {
-        mLlBack = (LinearLayout)findViewById(R.id.titleBack_persionMessage_ll);
-        mTvTitleName = (TextView)findViewById(R.id.titleName_tv);
-        mTvDeleteSelected = (TextView)findViewById(R.id.selectDelete_collection_tv);
-        mRbSelectAll=(CheckBox)findViewById(R.id.selectAll_collection_rb);
-        mLvCollectionMessage = (ListView)findViewById(R.id.collectionMessage_collection_lv);
-        mTvDeleteSelected.setVisibility(View.VISIBLE);
-        mTvTitleName.setText("收藏栏");
-        initListView();
-    }
-
-
-    private void initListView() {
-        mLvCollectionMessage.setAdapter(null);
-        list= DBUtil.getInstance(CollectionActivity.this).selectCollection("phoneNumber",UserMessageVariable.osUserMessage.oStrPhoneNumber);
-        Log.e("收藏的条数",list.size()+"");
-        collectionAdapter= CollectionAdapter.getInitCollectionAdapter(CollectionActivity.this,list);
-        mLvCollectionMessage.setAdapter(collectionAdapter);
-    }
-
-    @Override
-    void setControlListener() {
-        mLlBack.setOnClickListener(this);
-        mTvDeleteSelected.setOnClickListener(this);
-        mRbSelectAll.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+        mListCollectionMessage = HandleCollectEssayMessage.readAllEssayMessage();
+        back=(Button)findViewById(R.id.btn_leftTop);
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                if (isChecked){
-                    for (int i=0;i<list.size();i++){
-                        listBoolean.set(i,true);
-                        collectionAdapter.notifyDataSetChanged();
-                    }
-                }else {
-                    for (int i=0;i<list.size();i++){
-                        listBoolean.set(i,false);
-                        collectionAdapter.notifyDataSetChanged();
-                    }
-                    Log.e("全不选","");
-                }
+            public void onClick(View v) {
+                finish();
             }
         });
+        bookShelf = (GridView) findViewById(R.id.bookShelf);
+        ShlefAdapter adapter=new ShlefAdapter(this);
+        bookShelf.setAdapter(adapter);
+
     }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.titleBack_persionMessage_ll:
-                finish();
-                break;
-            case R.id.selectDelete_collection_tv:
-                Log.e("列表情况",listBoolean+"");
-                if (isDelete){
-                    Log.e("点击的是删除","");
-                    mRbSelectAll.setVisibility(View.VISIBLE);
-                    mTvDeleteSelected.setText("提交");
-                    isShow=true;
-                    isDelete=false;
-                    collectionAdapter.notifyDataSetChanged();
-                }else {
-                    Log.e("点击的是提交","");
-
-                    for (int i=0;i<listBoolean.size();i++){
-                        Log.e(""+i,""+listBoolean);
-                        if (listBoolean.get(i)){
-                            DBUtil.getInstance(CollectionActivity.this).deleteCollection(list.get(i).get("phoneNumber"),list.get(i).get("title"));
-                            listBoolean.remove(i);
-                            list.remove(i);
-                            i--;
-                            Log.e(""+i,""+listBoolean);
-                        }
-                    }
-                    initListView();
-                    mTvDeleteSelected.setText("删除");
-                    isShow=false;
-                    isDelete=true;
-                    mRbSelectAll.setVisibility(View.GONE);
-                   // collectionAdapter.notifyDataSetChanged();
-                }
-
-                break;
+    class ShlefAdapter extends BaseAdapter {
+        private Context mContext;
+        public ShlefAdapter(Context context) {
+            mContext=context;
         }
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return mListCollectionMessage.size();
+        }
+
+        @Override
+        public Object getItem(int arg0) {
+            // TODO Auto-generated method stub
+            return arg0;
+        }
+
+        @Override
+        public long getItemId(int arg0) {
+            // TODO Auto-generated method stub
+            return arg0;
+        }
+
+        @Override
+        public View getView(final int position, View contentView, ViewGroup arg2) {
+            // TODO Auto-generated method stub
+
+            contentView= LayoutInflater.from(getApplicationContext()).inflate(R.layout.item, null);
+
+            TextView view=(TextView) contentView.findViewById(R.id.imageView1);
+            view.setText(mListCollectionMessage.get(position).title);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(CollectionActivity.this, DetailMessageActivity.class);
+                    intent.putExtra("URL", mListCollectionMessage.get(position).url);
+                    intent.putExtra("title", mListCollectionMessage.get(position).title);
+                    intent.putExtra("timeandauthor", mListCollectionMessage.get(position).time);
+                    startActivity(intent);
+                }
+            });
+            view.setOnLongClickListener(new OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    final Dialog dialogWarn = new AlertDialog.Builder(mContext).create();
+                    final View viewDialog = LayoutInflater.from(mContext).inflate(R.layout.dialog_collection_view,null);
+                    dialogWarn.show();
+                    dialogWarn.setCanceledOnTouchOutside(true);
+                    dialogWarn.setContentView(viewDialog);
+                    ViewUtil.setDialogWindowAttr(dialogWarn, 800, 550);
+                    Button btCancleCollection = (Button)viewDialog.findViewById(R.id.bt_cancleCollection);
+                    Button btNoCancleCollection = (Button)viewDialog.findViewById(R.id.bt_noCancle);
+
+                    btCancleCollection.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            HandleCollectEssayMessage.deleteSingleEssay(mListCollectionMessage.get(position).title);
+                            mListCollectionMessage.remove(position);
+                            notifyDataSetChanged();
+                            dialogWarn.dismiss();
+                        }
+                    });
+                    btNoCancleCollection.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialogWarn.dismiss();
+                        }
+                    });
+                    return true;
+                }
+            });
+            return contentView;
+        }
+
     }
 
-    @Override
-    public void update(Observable observable, Object o) {
-        mLoginState = (Boolean) o;
-    }
 
 }

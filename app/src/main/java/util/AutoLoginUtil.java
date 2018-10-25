@@ -2,10 +2,9 @@ package util;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import data.HandleUserMessage;
-import observer.LoginStateObservable;
+import variable.LoginStateVariable;
 import variable.UserMessageVariable;
 
 /**
@@ -48,8 +47,7 @@ public class AutoLoginUtil {
         String strPhoneNumber = autoLoginSp.getString("phoneNumber", "0");
         if (HandleUserMessage.userExist(strPhoneNumber)){
             UserMessageVariable.osUserMessage = HandleUserMessage.readUserMessage(strPhoneNumber);
-            Log.e("TAG", "登录信息1："+UserMessageVariable.osUserMessage);
-            LoginStateObservable.getInstatnce().notificationOberver(true);
+            LoginStateVariable.osLoginState = true;
         }
     }
 }

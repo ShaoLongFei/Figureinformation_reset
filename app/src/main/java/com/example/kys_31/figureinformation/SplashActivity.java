@@ -1,167 +1,216 @@
 package com.example.kys_31.figureinformation;
 
+import android.Manifest;
+import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
+import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Observable;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import data.HandleWebDataMessage;
-import data.WebDataMessage;
+import dataBean.WheatherBean2;
+import util.GetCityNameByLocation;
+import variable.PersionCenterVariable;
+import view.CircleProgressBar;
 
 /**
- * Created by 幽蓝丶流月 on 2017/9/14.
- * @function 展示页 3秒
+ * Created by kys_7 on 2017/11/23.
  */
 
-public class SplashActivity extends BaseActivity {
-
-    private String[] from;
-    private String[] time;
-    private String[] clickNumber;
-    private String[] title;
-    private String[] content;
-    private String[] url;
-    private String[] pictureUrl;
-    private int lines;
-    private int position=0;
-    private String StringUrl="http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm;jsessionid=C6E1686738E860D7CF9A735C35FEB6CA?parentPageId=1505810791964&directionId=4&controlType=openhome";
-    private String[] text = new String[]{"可再生能源", "纳米科技", "食物营养", "油气类", "水体污染治理",
-            "大气污染防治", "集成电路装备", "编译报道", "重要报告", "重大传染病防治", "新药创制",
-            "宽带移动通信", "农业污染防治", "转基因生物", "数控机床"};
-    private String[] URL = new String[]{"http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm;jsessionid=C6E1686738E860D7CF9A735C35FEB6CA?parentPageId=1505810791964&directionId=4&controlType=openhome",
-            "http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm?parentPageId=1505811585475&directionId=1&controlType=openhome",
-            "http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm?parentPageId=1505811793424&directionId=5&controlType=openhome",
-            "http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm?parentPageId=1505813148957&directionId=19&controlType=openhome",
-            "http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm?parentPageId=1505813167069&directionId=8&controlType=openhome",
-            "http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm?parentPageId=1505813183979&directionId=20&controlType=openhome",
-            "http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm?parentPageId=1505813203183&directionId=7&controlType=openhome",
-            "http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendspecial.htm?parentPageId=1505653299236&serverId=82",
-            "http://portal.nstl.gov.cn/STMonitor/home/bg.htm?serverId=82",
-            "http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm?parentPageId=1505813348341&directionId=3&controlType=openhome",
-            "http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm?parentPageId=1505813335018&directionId=10&controlType=openhome",
-            "http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm?parentPageId=1505813316922&directionId=2&controlType=openhome",
-            "http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm?parentPageId=1505813301166&directionId=6&controlType=openhome",
-            "http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm?parentPageId=1505813284131&directionId=12&controlType=openhome",
-            "http://portal.nstl.gov.cn/STMonitor/home/resource_more_recommendadd.htm?parentPageId=1505813218549&directionId=9&controlType=openhome"};
-    private WebDataMessage mWebDataMessage;
-    private Handler handler;
-    private  Thread thread;
-
-
-
+public class SplashActivity extends AppCompatActivity{
+    private ImageView imageView_gif;
+    private CircleProgressBar bar1;
+    private Timer timer;
+    private int mIntProgress = 100;
+    private ImageView mIvLogo;
+    private ImageView mIvBottom;
+    private String API_KEY="60840102c71a2cb8c0f050fb54d44ca3";//聚合数据KEY
+    private String URL="http://v.juhe.cn/weather/index?format=1";//聚合数据天气接口
+//    private String API_KEY="c9472839248d40e0aa2d14bfe29fc877";//阿凡达KEY
+//    private String URL=" http://api.avatardata.cn/Weather/Query?";//阿凡达天气接口
     @Override
-    protected int getLayoutID() {
-        return R.layout.splash_screen;
-    }
-
-    @Override
-    protected void initControl() {
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        initHandler();
-        for (int s=0;s<13;s++){
-            if (!HandleWebDataMessage.webDataMessageExist(text[s])){
-                Log.e("闪屏开始加载",text[s]);
-                position=s;
-                 CreatThread();
-                break;
-            }
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.splash_activity);
+        ActionBar bar=getSupportActionBar();
+        bar.hide();
+        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
+                WindowManager.LayoutParams. FLAG_FULLSCREEN);
+        bar1 = (CircleProgressBar)findViewById(R.id.bar1);
+        mIvLogo = (ImageView)findViewById(R.id.iv_logo);
+        mIvBottom = (ImageView)findViewById(R.id.iv_bottom);
+        startAnim();
+        try{
+            checkPromiss();
+            getLocation();
+        }catch (Exception e){
+            System.out.print(e);
         }
 
-        if (thread==null){
-            handler.sendEmptyMessage(1);
-        }
-
-    }
-
-    private void initHandler() {
-        handler=new Handler(){
-
+        bar1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
-                startActivity(new Intent(SplashActivity.this,MainActivity.class));
+            public void onClick(View v) {
+                Intent intent= new Intent(SplashActivity.this,MainActivity.class);
+                startActivity(intent);
                 finish();
+                timer.cancel();
             }
-        };
-    }
+        });
 
-    private void CreatThread() {
-
-         thread = new Thread() {
+        timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                super.run();
+                mIntProgress -=10;
+                bar1.setProgress(mIntProgress);
+                if (mIntProgress<=0){
+                    Intent intent= new Intent(SplashActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    finish();
+                    timer.cancel();
+                }
+            }
+        };
+        timer.schedule(timerTask, 1000, 500);
 
+    }
+
+    private void startAnim() {
+        //Animation anim = AnimationUtils.loadAnimation(this, R.anim.alpha_set);
+        Animation anim = new AlphaAnimation(0.0f, 1.0f);
+        anim.setDuration(3000);
+        mIvBottom.startAnimation(anim);
+        mIvLogo.startAnimation(anim);
+    }
+
+
+    private void checkPromiss(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String permission1 = Manifest.permission.ACCESS_COARSE_LOCATION;
+            String permission2 = Manifest.permission.ACCESS_FINE_LOCATION;
+            requestPermissions(new String[]{permission1,permission2}, 123);
+        }
+    }
+
+    @SuppressLint("HandlerLeak")
+    Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 200:
+                    String cityName = (String) msg.obj;
+                    PersionCenterVariable.location=cityName;
+                    Log.e("所在城市",cityName);
+                    QueryWheather();
+                    break;
+                case 500:
+                    PersionCenterVariable.location="张家口";
+                    QueryWheather();
+                    break;
+            }
+        }
+    };
+
+    private void QueryWheather() {
+
+        Thread thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String url = setParams(PersionCenterVariable.location);
+                String res = null;
                 try {
-                    Document doc = Jsoup.connect(StringUrl).timeout(10000).get();
-                    Document doc2;
-                    Log.e("网页总标题", doc.title());
-                    Log.e("数据行数", doc.body().select("p").size() + "");
-                    lines = doc.body().select("a.font13.aral.blue1").size();
-                    title = new String[lines];
-                    content = new String[lines];
-                    time = new String[lines];
-                    from = new String[lines];
-                    clickNumber = new String[lines];
-                    url = new String[lines];
-                    pictureUrl = new String[lines];
-                    for (int i = 0; i < lines; i++) {
-                        title[i] = doc.body().select("a.font13.aral.blue1").get(i).text();
-                        content[i] = doc.body().select("div.zxx_text_overflow_5").get(i).text();
-                        time[i] = doc.body().select("span.date").get(i).text();
-                        from[i] = doc.body().select("span.fl").select("a").get(i).text();
-                        Log.e("超链接", doc.body().select("a.font13.aral.blue1").get(i).attr("href"));
-                        url[i] = "http://portal.nstl.gov.cn" + doc.body().select("a.font13.aral.blue1").get(i).attr("href");
-                        doc2 = Jsoup.connect("http://portal.nstl.gov.cn" + doc.body().select("a.font13.aral.blue1").get(i).attr("href")).timeout(5000).get();
-                        if (doc2.select("div.zoom.mt-15").select("img").attr("src").length() < 30) {
-                            pictureUrl[i] = "http://bpic.588ku.com/element_origin_min_pic/17/04/14/61a6df84d26a81f05c9e22dbbebe4ef1.jpg";
-                        } else {
-                            pictureUrl[i] = "http://portal.nstl.gov.cn" + doc2.select("div.zoom.mt-15").select("img").attr("src").substring(0, doc2.select("div.zoom.mt-15").select("img").attr("src").indexOf(".jpg") + 4);
-                            Log.e("添加的图片的网址", "http://portal.nstl.gov.cn" + doc2.select("div.zoom.mt-15").select("img").attr("src").substring(0, doc2.select("div.zoom.mt-15").select("img").attr("src").indexOf(".jpg") + 4));
-                        }
-                    }
-                    Log.e("点击量数据行数", doc.body().select("span.fl").size() + "");
-                    for (int j = 4; j < doc.body().select("span.fl").size(); j++) {
-                        clickNumber[j - 4] = doc.body().select("span.fl").get(j).text().substring(doc.body().select("span.fl").get(j).text().indexOf("点击量：") + 4);
-                    }
+                    res = doGet(url);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    return;
                 }
+                //聚合数据
+                WheatherBean2 wheatherBean=new Gson().fromJson(res,WheatherBean2.class);
+                WheatherBean2.ResultBean resultBean=wheatherBean.getResult();
+                WheatherBean2.ResultBean.TodayBean today=resultBean.getToday();
+                PersionCenterVariable.weather=today.getWeather();
+                PersionCenterVariable.temperature=today.getTemperature();
 
-                mWebDataMessage = new WebDataMessage(text[position], url, title, content, time, clickNumber, pictureUrl, from, new String[lines], lines);
-                HandleWebDataMessage.saveWebDataMessageData(mWebDataMessage);
-
-                Log.e("加载完成","我觉得两个比较好");
-                handler.sendEmptyMessage(1);
 
             }
-            };
-
-            thread.start();
-
-    }
-
-    @Override
-    void setControlListener() {
+        });
+        thread.start();
 
     }
 
-    @Override
-    public void onClick(View view) {
+    private void getLocation() {
+        GetCityNameByLocation.startLocation(SplashActivity.this, true, new GetCityNameByLocation.CallBack() {
+            @Override
+            public void onGetLocaltionSuccess(String cityName) {
+                Message msg = new Message();
+                msg.what = 200;
+                msg.obj = cityName;
+                Log.e("定位",cityName);
+                mHandler.sendMessage(msg);
+            }
 
+            @Override
+            public void onGetLocaltionFail(GetCityNameByLocation.LocErrorType type) {
+                mHandler.sendEmptyMessage(500);
+            }
+        });
     }
 
-    @Override
-    public void update(Observable observable, Object o) {
-        mLoginState = (Boolean)o;
+
+    private String doGet(String urlStr)throws IOException {
+        java.net.URL url = null;
+        HttpURLConnection conn = null;
+        InputStream is = null;
+        ByteArrayOutputStream baos = null;
+        url = new URL(urlStr);//根据地址创建URL对象
+        conn = (HttpURLConnection) url.openConnection();//打开网络链接
+        conn.setReadTimeout(5 * 1000);//设置读取超时时间
+        conn.setConnectTimeout(5 * 1000);//设置连接超时时间
+        conn.setRequestMethod("GET");//设置请求方式为GET
+        String jsonString;
+        if (conn.getResponseCode() == 200) {//结果码为200，表示连接成功
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));//获取响应的输入流对象
+            String line;
+            final StringBuffer responseResult = new StringBuffer();
+            while ((line = reader.readLine()) != null) {//读取信息
+                responseResult.append("\n").append(line);
+            }
+            jsonString = responseResult.toString();
+        } else {
+            jsonString = "null";
+        }
+        return jsonString;
     }
+
+    private String setParams(String province) {
+        // return URL + "?cityname=" + province + "&key=" + API_KEY;//阿凡达数据
+        return URL + "&cityname=" + province + "&key=" + API_KEY;//聚合数据
+    }
+
 }

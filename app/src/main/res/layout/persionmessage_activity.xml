@@ -4,7 +4,8 @@
     xmlns:imagecontrol="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/base_background">
 
     <LinearLayout
         android:elevation="5dp"
@@ -24,6 +25,7 @@
         android:layout_height="wrap_content" />
 
     <LinearLayout
+        android:visibility="gone"
         android:gravity="center_vertical"
         android:layout_marginTop="15dp"
         android:elevation="5dp"
@@ -69,8 +71,10 @@
             android:layout_marginLeft="20dp"
             android:text="头像"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <custom.RoundImageCustom
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"/>
+        <view.RoundImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
             imagecontrol:border_inside_color="#bc0978"
@@ -104,14 +108,19 @@
             android:layout_marginLeft="20dp"
             android:text="昵称"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"/>
 
         <TextView
+            android:gravity="end"
             android:id="@+id/name_persionMessage_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:text="图情资讯用户" />
+            android:hint="图情资讯用户"
+            android:textColor="@color/black"
+            android:textSize="15dp"/>
 
         <ImageView
             android:layout_marginRight="10dp"
@@ -137,13 +146,17 @@
             android:layout_marginLeft="20dp"
             android:text="性别"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"/>
         <TextView
             android:text="女"
             android:id="@+id/sex_persionMessage_tv"
             android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"/>
         <ImageView
             android:layout_marginRight="10dp"
             android:src="@drawable/access"
@@ -168,13 +181,17 @@
             android:layout_marginLeft="20dp"
             android:text="生日"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"/>
         <TextView
             android:text="2017-09-09"
             android:id="@+id/birsday_persionMessage_tv"
             android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"/>
         <ImageView
             android:layout_marginRight="10dp"
             android:src="@drawable/access"
@@ -214,13 +231,17 @@
             android:layout_marginLeft="20dp"
             android:text="浏览次数"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"/>
         <TextView
             android:text="2017 次"
             android:id="@+id/lookCount_persionMessage_tv"
             android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -239,13 +260,17 @@
             android:layout_marginLeft="20dp"
             android:text="设备名称"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"/>
         <TextView
             android:text="小米手机"
             android:id="@+id/deviceName_persionMessage_tv"
             android:layout_marginRight="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="15dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -256,13 +281,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
-            android:background="@drawable/systemset_button_bg"
+            android:background="@drawable/back_left"
             android:id="@+id/saveMessage_systemSet_bt"
             android:layout_weight="1"
             android:textColor="@android:color/white"
             android:text="保    存    信    息"
             android:layout_width="wrap_content"
-            android:layout_height="50dp" />
+            android:layout_height="60dp" />
     </LinearLayout>
 
 </LinearLayout>

@@ -8,5 +8,9 @@ import data.UserMessage;
  */
 
 public class UserMessageVariable {
-    public static volatile UserMessage osUserMessage;
+    public static volatile UserMessage osUserMessage; //用户信息
+    public static int osFirstLogin = 0;//用户是否是第一次登录
+    public static boolean mBrShowNewMessage = false;//是否显示新的信息
+    public static boolean mBrShowDoGrade = false;//对APP进行打分
+
 }

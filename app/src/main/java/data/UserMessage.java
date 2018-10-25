@@ -1,14 +1,12 @@
 package data;
 
-import android.graphics.Bitmap;
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**
- * Created by 张同心 on 2017/9/19.
- * @function 用户信息
+ *@author : 老头儿
+ *@email : 527672827@qq.com
+ *@org : 河北北方学院 移动开发工程部 C508
+ *@function : （功能） 用户信息
  */
 
 public class UserMessage implements Serializable {
@@ -34,5 +32,4 @@ public class UserMessage implements Serializable {
         this.oIntLookCount = oIntLookCount;
         this.oStrUpLookTime = oStrUpLookTime;
     }
-
 }

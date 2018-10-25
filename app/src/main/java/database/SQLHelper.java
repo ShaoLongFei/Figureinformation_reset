@@ -15,9 +15,14 @@ public class SQLHelper extends SQLiteOpenHelper
 	public static final String NAME = "name";
 	public static final String ORDERID = "orderId";
 	public static final String SELECTED = "selected";
+	public static final String CLASSNAME = "classname";//类别名称
+	public static final String CARDCONTENT = "cardcontent";//卡片内容
 	public static final String COLLECTION_TABLE_NAME = "collection";
 	public static final String CREATE_COLLECTION_TABLE = "create table "+COLLECTION_TABLE_NAME+"(_id INTEGER PRIMARY KEY, " +
 			"phoneNumber text, author text, time text, clickNumber text, title text, content text, pictureURL text)";
+	public static final String CREATE_CLASSNAME_TABLE = "create table "+CLASSNAME+"(_id INTEGER PRIMARY KEY, classname text, kind text, url text)";
+	public static final String CREATE_CARDCONTENT_TABLE = "create table "+CARDCONTENT+"(_id INTEGER PRIMARY KEY, classname text, title text, link text, description text, timeandauthor text, kind text," +
+			"pubdate text)";
 	private Context context;
 	public SQLHelper(Context context) {
 		super(context, DB_NAME, null, VERSION);
@@ -39,6 +44,8 @@ public class SQLHelper extends SQLiteOpenHelper
 				SELECTED + " SELECTED)";
 		db.execSQL(sql);
 		db.execSQL(CREATE_COLLECTION_TABLE);
+		db.execSQL(CREATE_CLASSNAME_TABLE);
+		db.execSQL(CREATE_CARDCONTENT_TABLE);
 	}
 
 
