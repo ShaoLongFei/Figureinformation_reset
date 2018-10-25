@@ -9,7 +9,8 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.example.kys_31.figureinformation.R;
+import com.example.liuyue.figureinformation_reset.R;
+
 
 /**
  * Created by Sai on 15/9/1.

@@ -22,7 +22,8 @@ import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.kys_31.figureinformation.R;
+
+import com.example.liuyue.figureinformation_reset.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;

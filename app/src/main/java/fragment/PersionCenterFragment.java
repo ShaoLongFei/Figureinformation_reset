@@ -8,13 +8,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.kys_31.figureinformation.CollectionActivity;
-import com.example.kys_31.figureinformation.CollectonSearchActivity;
-import com.example.kys_31.figureinformation.DynamicAvatarViewActivity;
-import com.example.kys_31.figureinformation.LoginActivity;
-import com.example.kys_31.figureinformation.PersionMessageActivity;
-import com.example.kys_31.figureinformation.R;
-import com.example.kys_31.figureinformation.SystemSetActivity;
+
+import  com.example.liuyue.figureinformation_reset.DynamicAvatarViewActivity;
+import  com.example.liuyue.figureinformation_reset.LoginActivity;
+import  com.example.liuyue.figureinformation_reset.PersionMessageActivity;
+
+import  com.example.liuyue.figureinformation_reset.SystemSetActivity;
+import com.example.liuyue.figureinformation_reset.CollectionActivity;
+import com.example.liuyue.figureinformation_reset.CollectonSearchActivity;
+import com.example.liuyue.figureinformation_reset.R;
 
 import java.util.Observable;
 

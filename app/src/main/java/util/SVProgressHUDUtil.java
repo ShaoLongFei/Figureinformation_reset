@@ -13,7 +13,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 
-import com.example.kys_31.figureinformation.R;
+
+import com.example.liuyue.figureinformation_reset.R;
 
 import view.SVCircleProgressBar;
 import view.SVProgressDefaultView;

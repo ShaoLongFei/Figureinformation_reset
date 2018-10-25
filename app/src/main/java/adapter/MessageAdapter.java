@@ -11,8 +11,9 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.kys_31.figureinformation.DetailMessageActivity;
-import com.example.kys_31.figureinformation.R;
+import  com.example.liuyue.figureinformation_reset.DetailMessageActivity;
+import com.example.liuyue.figureinformation_reset.R;
+
 
 import java.util.List;
 

@@ -21,7 +21,8 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.Transformation;
 import android.widget.LinearLayout;
 
-import com.example.kys_31.figureinformation.R;
+import com.example.liuyue.figureinformation_reset.R;
+
 
 /**
  * Created by Melvin Lobo on 10/19/2015.

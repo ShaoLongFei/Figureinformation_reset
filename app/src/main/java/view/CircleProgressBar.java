@@ -30,7 +30,7 @@ import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.example.kys_31.figureinformation.R;
+import com.example.liuyue.figureinformation_reset.R;
 
 /**
  * 圆形进度条

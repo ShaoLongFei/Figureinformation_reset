@@ -17,7 +17,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 
-import com.example.kys_31.figureinformation.R;
+import com.example.liuyue.figureinformation_reset.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

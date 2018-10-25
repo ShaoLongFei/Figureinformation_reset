@@ -8,7 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.kys_31.figureinformation.R;
+
+import com.example.liuyue.figureinformation_reset.R;
 
 import view.CustomVideoView;
 

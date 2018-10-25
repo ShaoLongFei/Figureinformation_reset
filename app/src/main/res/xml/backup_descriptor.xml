@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- TODO Remove the following "exclude" elements to make them a part of the auto backup -->
+    <exclude
+        domain="database"
+        path="database.db" />
+    <exclude
+        domain="database"
+        path="barcode_scanner_history.db" />
+    <!-- Exclude the shared preferences file that contains the GCM registrationId -->
+    <exclude
+        domain="sharedpref"
+        path="nointerest.xml" />
+    <exclude
+        domain="sharedpref"
+        path="lookCount.xml" />
+    <exclude
+        domain="sharedpref"
+        path="autoLogin.xml" />
+    <exclude
+        domain="sharedpref"
+        path="nightModel.xml" />
+    <exclude
+        domain="sharedpref"
+        path="loaddatacount.xml" />
+    <exclude
+        domain="sharedpref"
+        path="searchhistory.xml" />
+    <exclude
+        domain="sharedpref"
+        path="firstlogin.xml" />
+    <exclude
+        domain="sharedpref"
+        path="shownewmessage.xml" />
+</full-backup-content>

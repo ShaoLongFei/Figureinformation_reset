@@ -11,13 +11,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.kys_31.figureinformation.R;
+
 
 import java.util.HashMap;
 import java.util.List;
 
 import data.ClassDataMessage;
-import com.example.kys_31.figureinformation.HotSpecialActivity;
+import  com.example.liuyue.figureinformation_reset.HotSpecialActivity;
+import com.example.liuyue.figureinformation_reset.R;
+
 import variable.PreShowDataVariable;
 import variable.RemeberRandomIntVariable;
 

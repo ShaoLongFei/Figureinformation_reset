@@ -31,9 +31,10 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.example.kys_31.figureinformation.HotSpecialActivity;
-import com.example.kys_31.figureinformation.R;
-import com.example.kys_31.figureinformation.SearchActivity;
+import  com.example.liuyue.figureinformation_reset.HotSpecialActivity;
+
+import  com.example.liuyue.figureinformation_reset.SearchActivity;
+import com.example.liuyue.figureinformation_reset.R;
 import com.jude.rollviewpager.RollPagerView;
 import com.jude.rollviewpager.hintview.ColorPointHintView;
 

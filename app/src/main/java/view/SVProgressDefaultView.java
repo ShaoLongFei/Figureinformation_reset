@@ -10,7 +10,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.kys_31.figureinformation.R;
+import com.example.liuyue.figureinformation_reset.R;
+
 
 /**
  * Created by Sai on 15/8/15.

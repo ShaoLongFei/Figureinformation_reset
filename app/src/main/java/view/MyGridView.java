@@ -8,7 +8,7 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.GridView;
 
-import com.example.kys_31.figureinformation.R;
+import com.example.liuyue.figureinformation_reset.R;
 
 
 public class MyGridView extends GridView {

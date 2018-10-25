@@ -15,7 +15,8 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
-import com.example.kys_31.figureinformation.R;
+import com.example.liuyue.figureinformation_reset.R;
+
 
 /**
  * Created by 张同心 on 2017/9/26.

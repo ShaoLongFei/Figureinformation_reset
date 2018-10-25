@@ -3,27 +3,25 @@ package adapter;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.constraint.solver.Goal;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.kys_31.figureinformation.DetailMessageActivity;
-import com.example.kys_31.figureinformation.HotSpecialActivity;
-import com.example.kys_31.figureinformation.LoginActivity;
-import com.example.kys_31.figureinformation.R;
+import  com.example.liuyue.figureinformation_reset.DetailMessageActivity;
+import  com.example.liuyue.figureinformation_reset.HotSpecialActivity;
+import  com.example.liuyue.figureinformation_reset.LoginActivity;
+import com.example.liuyue.figureinformation_reset.R;
+
 
 import java.util.Comparator;
 import java.util.HashMap;

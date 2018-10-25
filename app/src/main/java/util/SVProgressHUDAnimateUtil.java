@@ -2,7 +2,8 @@ package util;
 
 import android.view.Gravity;
 
-import com.example.kys_31.figureinformation.R;
+import com.example.liuyue.figureinformation_reset.R;
+
 
 /**
  * Created by Sai on 15/8/16.

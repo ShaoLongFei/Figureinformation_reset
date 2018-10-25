@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.view.View;
@@ -15,9 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.kys_31.figureinformation.DynamicAvatarViewActivity;
-import com.example.kys_31.figureinformation.LoginActivity;
-import com.example.kys_31.figureinformation.R;
+import  com.example.liuyue.figureinformation_reset.DynamicAvatarViewActivity;
+import  com.example.liuyue.figureinformation_reset.LoginActivity;
+import com.example.liuyue.figureinformation_reset.R;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +28,6 @@ import data.ClassDataMessage;
 import data.HandleClassDataMessage;
 import variable.LoginStateVariable;
 import variable.RemeberRandomIntVariable;
-import variable.UserMessageVariable;
-import view.MetaballMenu;
 
 /**
  * @author : 老头儿

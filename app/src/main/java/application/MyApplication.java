@@ -3,7 +3,8 @@ package application;
 import android.app.Application;
 import android.content.SharedPreferences;
 
-import com.example.kys_31.figureinformation.R;
+
+import com.example.liuyue.figureinformation_reset.R;
 import com.mob.MobSDK;
 import com.mob.tools.proguard.ProtectedMemberKeeper;
 
